@@ -4,11 +4,13 @@ const minimist = require('minimist');
 
 /** Parse program arguments */
 const ARG_HEADER = 'header';
+const ARG_DIR = 'dir';
 const ARG_OUTPUT = 'output';
 const ARG_VERSION = 'version';
 const ARG_SINCE = 'since';
 const arguments = minimist(process.argv.slice(2));
 const header = arguments[ARG_HEADER];
+const directory = arguments[ARG_DIR] || '.';
 const outputFile = arguments[ARG_OUTPUT] || 'DEV_NOTES.md';
 const specificVersion = arguments[ARG_VERSION];
 const since = arguments[ARG_SINCE];
@@ -22,7 +24,7 @@ const VERSION = 'version: ';
 const TICKET_REGEX = /\[\D+-\d+]/gi;
 
 const output = child
-    .execSync(`git log --format=%B----DELIMITER---- --reverse ${since ? '--since='+since : ''}`)
+    .execSync(`git --git-dir ${directory}/.git log --format=%B----DELIMITER---- --reverse ${since ? '--since='+since : ''}`)
     .toString("utf-8");
 
 const commitsArray = output

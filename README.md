@@ -30,6 +30,10 @@ Where <options>:
 
 --header            main header of changelog file 
                       example: My header
+
+--dir               specify directory in which your repo is located; path can be absolute or relative
+                      default: . 
+                      example: ../dxchart5
                                            
 --output            name of output file
                       default: DEV_NOTES.md
@@ -43,23 +47,23 @@ Where <options>:
 ```
 
 ### Examples
-All history
-```shell script
-node index.js
-```
-Provide header
+All history with header
 ```shell script
 node index.js --header="My header"
 ```
+Specify repository directory
+```shell script
+node index.js --dir=../my-repo
+```
 Output to file
 ```shell script
-node index.js --header="My header" --output=DEV_NOTES.md
+node index.js --output=DEV_NOTES.md
 ```
 Only 1 version
 ```shell script
-node index.js --header="My header" --output=DEV_NOTES.md --version=1.0.1
+node index.js --version=1.0.1
 ```
-Only 1 version since 12th July 2020
+All since 12th July 2020
 ```shell script
-node index.js --header="My header" --output=DEV_NOTES.md --version=1.0.1 --since=12.07.2020
+node index.js --since=12.07.2020
 ```
