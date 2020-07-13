@@ -7,12 +7,14 @@ const ARG_HEADER = 'header';
 const ARG_DIR = 'dir';
 const ARG_OUTPUT = 'output';
 const ARG_VERSION = 'version';
+const ARG_FORMAT = 'format';
 const ARG_SINCE = 'since';
 const arguments = minimist(process.argv.slice(2));
 const header = arguments[ARG_HEADER];
 const directory = arguments[ARG_DIR] || '.';
-const outputFile = arguments[ARG_OUTPUT] || 'DEV_NOTES.md';
+const outputFile = arguments[ARG_OUTPUT];
 const specificVersion = arguments[ARG_VERSION];
+const format = arguments[ARG_FORMAT] || 'md';
 const since = arguments[ARG_SINCE];
 
 /** Git log and build structure */
@@ -107,9 +109,95 @@ if (features.length !== 0 || breaking.length !== 0 || otherNotes.length !== 0 ||
 structure.reverse();
 
 /** Format and output */
-const changelog = generateChangelog(structure, header, specificVersion);
+let changelog;
+if (format === 'md') {
+    changelog = generateChangelogMd(structure, header, specificVersion);
+} else if (format === 'html') {
+    changelog = generateChangelogHTML(structure, header, specificVersion);
+} else {
+    changelog = 'unknown format, known ones are: md, html'
+}
 console.log(`${changelog}`);
-fs.writeFileSync(`./${outputFile}`, `${changelog}`);
+if (outputFile) {
+    fs.writeFileSync(`./${outputFile}`, `${changelog}`);
+}
+
+
+/** MD generator */
+function generateChangelogMd(structure, header, specificVersion) {
+    let changelog = [];
+    if (header) {
+        changelog.push(`#${header}`);
+    }
+    if (specificVersion) {
+        structure = structure.filter(item => item.version === specificVersion);
+    }
+    structure.forEach(item => {
+        changelog.push(`\n##${item.version}`);
+        generateHeaderMd(changelog, "Feature", item.features);
+        generateHeaderMd(changelog, "Breaking", item.breaking);
+        generateHeaderMd(changelog, "Other notes", item.otherNotes);
+        generateHeaderMd(changelog, "Tickets", item.tickets, (m) => {
+            const ticketStr = m.match(TICKET_REGEX)[0];
+            let ticketNumber = ticketStr.substring(1, ticketStr.length - 1);
+            let ticketMsg = m.substring(m.indexOf(ticketStr) + ticketStr.length).trim();
+            return `[${ticketNumber}](https://jira.in.devexperts.com/browse/${ticketNumber}) ${ticketMsg}`;
+        });
+    });
+    return changelog.join("");
+}
+
+function generateHeaderMd(changelog, headerName, messages, messageConvertFn) {
+    if (messages && messages.length !== 0) {
+        changelog.push(`\n###${headerName}`)
+        messages.forEach(m => {
+            if (messageConvertFn) {
+                m = messageConvertFn(m);
+            }
+            changelog.push(`\n* ${m}`);
+        });
+    }
+}
+
+/** HTML generator */
+function generateChangelogHTML(structure, header, specificVersion) {
+    let changelog = [];
+    changelog.push('<html><body>');
+    if (header) {
+        changelog.push(`<h1>${header}</h1>`);
+    }
+    if (specificVersion) {
+        structure = structure.filter(item => item.version === specificVersion);
+    }
+    structure.forEach(item => {
+        changelog.push(`<hr><h2>${item.version}</h2>`);
+        generateHeaderHTML(changelog, "Feature", item.features);
+        generateHeaderHTML(changelog, "Breaking", item.breaking);
+        generateHeaderHTML(changelog, "Other notes", item.otherNotes);
+        generateHeaderHTML(changelog, "Tickets", item.tickets, (m) => {
+            const ticketStr = m.match(TICKET_REGEX)[0];
+            let ticketNumber = ticketStr.substring(1, ticketStr.length - 1);
+            let ticketMsg = m.substring(m.indexOf(ticketStr) + ticketStr.length).trim();
+            return `<a href="https://jira.in.devexperts.com/browse/">${ticketNumber}</a> ${ticketMsg}`;
+        });
+    });
+    changelog.push('</body></html>');
+    return changelog.join("");
+}
+
+function generateHeaderHTML(changelog, headerName, messages, messageConvertFn) {
+    if (messages && messages.length !== 0) {
+        changelog.push(`<h3>${headerName}</h3>`)
+        changelog.push(`<ul>`);
+        messages.forEach(m => {
+            if (messageConvertFn) {
+                m = messageConvertFn(m);
+            }
+            changelog.push(`<li>${m}</li>`);
+        });
+        changelog.push(`</ul>`);
+    }
+}
 
 /** Functions */
 function tryGetMessage(row, prefix) {
@@ -125,39 +213,4 @@ function getToLineEnd(line) {
         line = line.substring(0, line.indexOf('\n'))
     }
     return line;
-}
-
-function generateChangelog(structure, header, specificVersion) {
-    let changelog = [];
-    if (header) {
-        changelog.push(`#${header}`);
-    }
-    if (specificVersion) {
-        structure = structure.filter(item => item.version === specificVersion);
-    }
-    structure.forEach(item => {
-        changelog.push(`\n##${item.version}`);
-        generateHeader(changelog, "Feature", item.features);
-        generateHeader(changelog, "Breaking", item.breaking);
-        generateHeader(changelog, "Other notes", item.otherNotes);
-        generateHeader(changelog, "Tickets", item.tickets, (m) => {
-            const ticketStr = m.match(TICKET_REGEX)[0];
-            let ticketNumber = ticketStr.substring(1, ticketStr.length - 1);
-            let ticketMsg = m.substring(m.indexOf(ticketStr) + ticketStr.length).trim();
-            return `[${ticketNumber}](https://jira.in.devexperts.com/browse/${ticketNumber}) ${ticketMsg}`;
-        });
-    });
-    return changelog.join("");
-}
-
-function generateHeader(changelog, headerName, messages, messageConvertFn) {
-    if (messages && messages.length !== 0) {
-        changelog.push(`\n###${headerName}`)
-        messages.forEach(m => {
-            if (messageConvertFn) {
-                m = messageConvertFn(m);
-            }
-            changelog.push(`\n* ${m}`);
-        });
-    }
 }

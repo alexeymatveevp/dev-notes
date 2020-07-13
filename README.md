@@ -1,7 +1,7 @@
 # Developer notes
 Simple tool to generate changelog notes from git commits
 
-Supports `.md` format
+Supports 2 formats: `md` and `html`
 
 ## Overview
 Use the following meta-information in your commits
@@ -36,10 +36,14 @@ Where <options>:
                       example: ../dxchart5
                                            
 --output            name of output file
-                      default: DEV_NOTES.md
+                      example: DEV_NOTES.md
                                             
 --version           print notes only for specific version; your commits should contain 'version: 1.1.30' for this to work
                       example: 1.1.30
+
+--format            output format of notes
+                      default: md
+                      example: html
                                             
 --since             gathers notes only starting from specific date
                       default: <empty>
@@ -62,6 +66,10 @@ node index.js --output=DEV_NOTES.md
 Only 1 version
 ```shell script
 node index.js --version=1.0.1
+```
+HTML format
+```shell script
+node index.js --format=html
 ```
 All since 12th July 2020
 ```shell script
