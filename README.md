@@ -26,7 +26,8 @@ Where <options>:
 ## Overview
 Use the following meta-information in your commits
 * `version: 1.0.0` - to identify all commits before this belongs to `1.0.0` version;  
- (if you don't have any commit with `version: ...` you'll get `Unstructured commits` as a header version)
+ if you don't have any commit with `version: ...` you'll get `Unstructured commits` as a header version  
+ all commits after the last `version` will be marked with `Unreleased` header
 * `feat: bla bla` - to include `bla bla` to `Features` section  
 feature is something new like new API, functionality, behaviour
 * `brk: bla bla` - to include `bla bla` to `Breaking` section  

@@ -91,6 +91,17 @@ if (structure.length === 0) {
         }
     )
 }
+if (features.length !== 0 || breaking.length !== 0 || otherNotes.length !== 0 || tickets.length !== 0) {
+    structure.push(
+        {
+            version: "Unreleased",
+            features: features,
+            breaking: breaking,
+            otherNotes: otherNotes,
+            tickets: tickets
+        }
+    )
+}
 
 /** Format and output */
 const changelog = generateChangelog(structure, header, specificVersion);
