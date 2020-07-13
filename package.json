@@ -1,0 +1,22 @@
+{
+  "name": "dev-notes",
+  "version": "0.0.1",
+  "description": "Simple git changelog generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "fs": "^0.0.1-security",
+    "minimist": "^1.2.5"
+  },
+  "author": "Alexey Matveev <amatveev@devexperts.com>",
+  "license": "ISC",
+  "files": [
+    "index.js/*"
+  ],
+  "publishConfig": {
+    "registry": "https://nexus.in.devexperts.com/repository/npm-dx-private/"
+  }
+}
