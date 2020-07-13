@@ -127,13 +127,13 @@ if (outputFile) {
 function generateChangelogMd(structure, header, specificVersion) {
     let changelog = [];
     if (header) {
-        changelog.push(`#${header}`);
+        changelog.push(`# ${header}`);
     }
     if (specificVersion) {
         structure = structure.filter(item => item.version === specificVersion);
     }
     structure.forEach(item => {
-        changelog.push(`\n\n##${item.version}`);
+        changelog.push(`\n\n## ${item.version}`);
         generateHeaderMd(changelog, "Feature", item.features);
         generateHeaderMd(changelog, "Breaking", item.breaking);
         generateHeaderMd(changelog, "Other notes", item.otherNotes);
@@ -149,7 +149,7 @@ function generateChangelogMd(structure, header, specificVersion) {
 
 function generateHeaderMd(changelog, headerName, messages, messageConvertFn) {
     if (messages && messages.length !== 0) {
-        changelog.push(`\n###${headerName}`)
+        changelog.push(`\n### ${headerName}`)
         messages.forEach(m => {
             if (messageConvertFn) {
                 m = messageConvertFn(m);
