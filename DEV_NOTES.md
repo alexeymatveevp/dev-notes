@@ -1,4 +1,7 @@
 
+##Unreleased
+###Other notes
+* added *DEV_NOTES.md* as example to git
 ##1.0.1
 ###Feature
 * added more README info
