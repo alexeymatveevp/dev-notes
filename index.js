@@ -102,6 +102,7 @@ if (features.length !== 0 || breaking.length !== 0 || otherNotes.length !== 0 ||
         }
     )
 }
+structure.reverse();
 
 /** Format and output */
 const changelog = generateChangelog(structure, header, specificVersion);
