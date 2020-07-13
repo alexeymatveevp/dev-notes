@@ -1,6 +1,9 @@
 # Dev notes 'notes'
 
-## Unreleased
+## 1.0.6
+### Feature
+* support multiple messages of the same type in one commit
+* test multiple messages in on commit (if you see this in same version - it works)
 ### Other notes
 * additional space for `md` headers added
 
