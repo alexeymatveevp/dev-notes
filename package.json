@@ -1,6 +1,6 @@
 {
   "name": "@dx-private/dev-notes",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Simple git changelog generator",
   "main": "index.js",
   "dependencies": {

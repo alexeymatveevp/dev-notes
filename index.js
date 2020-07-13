@@ -133,7 +133,7 @@ function generateChangelogMd(structure, header, specificVersion) {
         structure = structure.filter(item => item.version === specificVersion);
     }
     structure.forEach(item => {
-        changelog.push(`\n##${item.version}`);
+        changelog.push(`\n\n##${item.version}`);
         generateHeaderMd(changelog, "Feature", item.features);
         generateHeaderMd(changelog, "Breaking", item.breaking);
         generateHeaderMd(changelog, "Other notes", item.otherNotes);
