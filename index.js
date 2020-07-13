@@ -63,26 +63,29 @@ commitsArray.forEach(commit => {
         otherNotes = [];
         tickets = [];
     }
-    const message = commit.message;
-    const featureMsg = tryGetMessage(message, FEATURE);
-    if (featureMsg) {
-        features.push(featureMsg);
-    }
-    const breakingMsg = tryGetMessage(commit.message, BREAKING);
-    if (breakingMsg) {
-        breaking.push(breakingMsg);
-    }
-    const otherNotesMsg = tryGetMessage(message, OTHER_NOTES);
-    if (otherNotesMsg) {
-        otherNotes.push(otherNotesMsg);
-    }
-    // assume
-    let match = message.match(TICKET_REGEX);
-    if (match && message.indexOf(match[0]) < 5) {
-        let ticketMsg = message.substring(message.indexOf(match[0]));
-        ticketMsg = getToLineEnd(ticketMsg);
-        tickets.push(ticketMsg);
-    }
+    const messages = commit.message.split("\n");
+    messages.forEach(message => {
+        const featureMsg = tryGetMessage(message, FEATURE);
+        if (featureMsg) {
+            features.push(featureMsg);
+        }
+        const breakingMsg = tryGetMessage(commit.message, BREAKING);
+        if (breakingMsg) {
+            breaking.push(breakingMsg);
+        }
+        const otherNotesMsg = tryGetMessage(message, OTHER_NOTES);
+        if (otherNotesMsg) {
+            otherNotes.push(otherNotesMsg);
+        }
+        // assume ticket number is somewhere at the start of line
+        // this will filter out "Merge..." or "Revert..." commit messages
+        let match = message.match(TICKET_REGEX);
+        if (match && message.indexOf(match[0]) < 5) {
+            let ticketMsg = message.substring(message.indexOf(match[0]));
+            ticketMsg = getToLineEnd(ticketMsg);
+            tickets.push(ticketMsg);
+        }
+    });
 });
 if (structure.length === 0) {
     structure.push(
