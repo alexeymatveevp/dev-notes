@@ -181,7 +181,7 @@ function generateChangelogHTML(structure, header, specificVersion) {
             const ticketStr = m.match(TICKET_REGEX)[0];
             let ticketNumber = ticketStr.substring(1, ticketStr.length - 1);
             let ticketMsg = m.substring(m.indexOf(ticketStr) + ticketStr.length).trim();
-            return `<a href="https://jira.in.devexperts.com/browse/">${ticketNumber}</a> ${ticketMsg}`;
+            return `<a href="https://jira.in.devexperts.com/browse/${ticketNumber}">${ticketNumber}</a> ${ticketMsg}`;
         });
     });
     changelog.push('</body></html>');
