@@ -47,7 +47,10 @@ Where <options>:
                                             
 --since             gathers notes only starting from specific date
                       default: <empty>
-                      example: 13.07.2020                      
+                      example: 13.07.2020           
+                                            
+--ticketLinkPrefix  prefix for ticket link
+                      example: https://jira.my.company.com/browse/                      
 ```
 
 ### Examples

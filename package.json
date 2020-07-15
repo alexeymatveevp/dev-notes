@@ -1,5 +1,5 @@
 {
-  "name": "@dx-private/dev-notes",
+  "name": "dev-notes",
   "version": "1.0.6",
   "description": "Simple git changelog generator",
   "main": "index.js",
@@ -8,14 +8,11 @@
     "fs": "^0.0.1-security",
     "minimist": "^1.2.5"
   },
-  "author": "Alexey Matveev <amatveev@devexperts.com>",
+  "author": "Alexey Matveev <david.lucky.star@gmail.com>",
   "license": "ISC",
   "files": [
     "index.js",
     "DEV_NOTES.md",
     "README.md"
-  ],
-  "publishConfig": {
-    "registry": "https://nexus.in.devexperts.com/repository/npm-dx-private/"
-  }
+  ]
 }

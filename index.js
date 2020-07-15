@@ -9,6 +9,7 @@ const ARG_OUTPUT = 'output';
 const ARG_VERSION = 'version';
 const ARG_FORMAT = 'format';
 const ARG_SINCE = 'since';
+const ARG_TICKET_LINK_PREFIX = 'ticketLinkPrefix';
 const arguments = minimist(process.argv.slice(2));
 const header = arguments[ARG_HEADER];
 const directory = arguments[ARG_DIR] || '.';
@@ -16,6 +17,7 @@ const outputFile = arguments[ARG_OUTPUT];
 const specificVersion = arguments[ARG_VERSION];
 const format = arguments[ARG_FORMAT] || 'md';
 const since = arguments[ARG_SINCE];
+const ticketLinkPrefix = arguments[ARG_TICKET_LINK_PREFIX];
 
 /** Git log and build structure */
 const FEATURE = 'feat: ';
@@ -144,7 +146,7 @@ function generateChangelogMd(structure, header, specificVersion) {
             const ticketStr = m.match(TICKET_REGEX)[0];
             let ticketNumber = ticketStr.substring(1, ticketStr.length - 1);
             let ticketMsg = m.substring(m.indexOf(ticketStr) + ticketStr.length).trim();
-            return `[${ticketNumber}](https://jira.in.devexperts.com/browse/${ticketNumber}) ${ticketMsg}`;
+            return `[${ticketNumber}](${ticketLinkPrefix}${ticketNumber}) ${ticketMsg}`;
         });
     });
     return changelog.join("");
@@ -181,7 +183,7 @@ function generateChangelogHTML(structure, header, specificVersion) {
             const ticketStr = m.match(TICKET_REGEX)[0];
             let ticketNumber = ticketStr.substring(1, ticketStr.length - 1);
             let ticketMsg = m.substring(m.indexOf(ticketStr) + ticketStr.length).trim();
-            return `<a href="https://jira.in.devexperts.com/browse/${ticketNumber}">${ticketNumber}</a> ${ticketMsg}`;
+            return `<a href="${ticketLinkPrefix}${ticketNumber}">${ticketNumber}</a> ${ticketMsg}`;
         });
     });
     changelog.push('</body></html>');
